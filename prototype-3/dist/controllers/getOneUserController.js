@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOneUser = void 0;
-const user_1 = require("../schema/user");
+const clusterConnections_1 = require("../lib/clusterConnections");
 async function getOneUser(id) {
     try {
-        const structure = await user_1.User.find({ userId: id });
-        return structure;
+        return await (0, clusterConnections_1.mainToClusterRetrieval)(id);
     }
     catch (err) {
         console.log(err);

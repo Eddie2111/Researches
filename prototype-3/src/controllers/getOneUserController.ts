@@ -1,13 +1,9 @@
 "use strict";
-import {
-  IUser,
-  User,
-} from '../schema/user';
+import { mainToClusterRetrieval } from '../lib/clusterConnections';
 
-export async function getOneUser(id: string): Promise<IUser[]> {
+export async function getOneUser(id: string): Promise<any> {
   try {
-    const structure = await User.find({ userId: id });
-    return structure;
+    return await mainToClusterRetrieval(id);
   } catch (err: unknown) {
     console.log(err);
     return [];

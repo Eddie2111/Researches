@@ -1,5 +1,4 @@
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
 
@@ -9,7 +8,6 @@ import {
   main_Cluster,
 } from './lib/clusterConnections';
 import { Connect_cache } from './lib/redis';
-// routes
 import createUserRouter from './routes/createUser';
 import deleteUserRouter from './routes/deleteUser';
 import getUser from './routes/getUser';
@@ -20,15 +18,13 @@ const app: express.Application = express();
 
 const port = process.env.PORT || 3100;
 
-dotenv.config();
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(
   rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-    standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+    windowMs: 15 * 60 * 1000,
+    limit: 100,
+    standardHeaders: "draft-7",
     legacyHeaders: false,
   })
 );

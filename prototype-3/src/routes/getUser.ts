@@ -14,11 +14,11 @@ router
     res.send("wrong method used");
   })
   .post(async (req: Request, res: Response) => {
-    const response = await getOneUser(req.body.id);
+    const response = await getOneUser(req.body.username);
     res.json({
       data: response,
       message: "user fetched",
-      status: response.length > 0 ? 200 : 400,
+      // status: response.length > 0 ? 200 : 400,
     });
   });
 

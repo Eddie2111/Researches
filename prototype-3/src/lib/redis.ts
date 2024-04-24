@@ -1,8 +1,6 @@
 "use strict";
-import dotenv from 'dotenv';
 import { Redis } from 'ioredis';
 
-dotenv.config();
 let redis: Redis | undefined;
 
 export function Connect(url: string): void {

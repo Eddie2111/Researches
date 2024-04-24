@@ -1,12 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRedisInstance = exports.Connect_cache = exports.Connect = void 0;
-const dotenv_1 = __importDefault(require("dotenv"));
 const ioredis_1 = require("ioredis");
-dotenv_1.default.config();
 let redis;
 function Connect(url) {
     if (!redis) {

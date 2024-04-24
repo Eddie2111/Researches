@@ -63,7 +63,7 @@ exports.userSchema = zod_1.z.object({
         .string()
         .min(11, { message: "length too small, more than 2 required" })
         .max(35, { message: "length too big, less than 32 required" }),
-    userId: zod_1.z
+    username: zod_1.z
         .string()
         .min(5, { message: "length too small, more than 2 required" })
         .max(20, { message: "length too big, less than 32 required" }),

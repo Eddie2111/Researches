@@ -51,7 +51,7 @@ export const userSchema = z.object({
     .string()
     .min(11, { message: "length too small, more than 2 required" })
     .max(35, { message: "length too big, less than 32 required" }),
-  userId: z
+  username: z
     .string()
     .min(5, { message: "length too small, more than 2 required" })
     .max(20, { message: "length too big, less than 32 required" }),
