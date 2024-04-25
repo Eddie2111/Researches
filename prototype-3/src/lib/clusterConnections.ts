@@ -1,11 +1,12 @@
+import axios from "axios";
 //! this file requires significant improvement using class object approach
 //! taking up a massive payload of 119
 //! convert to mjs/cjs if possible
-import { z } from 'zod';
+import { z } from "zod";
 
-import { userSchema } from '../schema/user';
+import { userSchema } from "../schema/user";
 // import the connection by getInstance
-import { Connect_cache } from './redis';
+import { Connect_cache } from "./redis";
 
 // state main redis url in a string
 const mainCache: string = "redis://localhost:5000";
@@ -75,6 +76,30 @@ export const cluster_insert = (
   }
 };
 
+interface GoResponse {
+  data: {
+    port: string;
+  };
+}
+
+export const mainToClusterInsert = async (
+  parsed: z.infer<typeof userSchema>
+) => {
+  try {
+    const leastUsedRedis: GoResponse = await axios.get("http://localhost:8000");
+    const response1 = await main_cluster_insert(
+      parsed.username,
+      leastUsedRedis.data.port
+    );
+    const response2 = await cluster_insert(leastUsedRedis.data.port, parsed);
+    console.log(parsed, "stored at", leastUsedRedis.data.port);
+    return true;
+  } catch (err: unknown) {
+    console.log(err);
+    return false;
+  }
+};
+
 // getting a data using the combination of main to cluster function
 export const mainToClusterRetrieval = async (key: string) => {
   let portToGet: any;
@@ -101,3 +126,37 @@ export const mainToClusterRetrieval = async (key: string) => {
     return {};
   }
 };
+
+export const mainToClusterRemove = async (key: string) => {
+  let portToGet: any;
+  try {
+    // getting the location of the key
+    const location = await main_conn.get(key);
+    clusterCaches.forEach((items: string, index: number) => {
+      if (items.includes(location)) {
+        // getting the cached connection string
+        portToGet = main[index];
+      }
+    });
+    // removing the value using the key from the clusters
+    const response_1 = portToGet.delete(key);
+    console.log(location, response_1);
+    return true;
+  } catch (err: unknown) {
+    // handling operational errors
+    console.log(err);
+    return false;
+  }
+};
+
+/*
+/**
+ * an interface a way to define a data type
+ * an interface supports type overloading and type combination
+ * this gives significant advantage over using only "type" to 
+ * define a variable.
+ * 
+ * use strict over the file is used to handle strict variable 
+ * declaration and reducing variable over usage and re-assignment.
+ * Plus, alerts for unused variables and functions.
+ */
