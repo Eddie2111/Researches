@@ -14,7 +14,8 @@
 ## Prototype-3
 
 - Built using NodeJS with typescript for additonal typesafety.
-- it has some import/export bugs with type transpillation errors. Please avoid using it.
+- No bugs or transpillation errors.
+- Single instance of redis connected.
 
 ## Prototype-4
 
