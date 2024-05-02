@@ -1,27 +1,21 @@
 "use strict";
-import {
-  IUser,
-  User,
-} from '../schema/user';
 
 interface IresponseProps {
-  totalCount: number;
-  users: IUser[];
+  totalCount: string;
+  users: string;
 }
 
 export async function getAllUsers(): Promise<IresponseProps> {
   try {
-    const dataset = await User.find().limit(10);
-    const totalUsers = await User.countDocuments({});
     return {
-      totalCount: totalUsers,
-      users: dataset,
+      totalCount: "Not available",
+      users: "Not available",
     };
   } catch (err: unknown) {
     console.log(err);
     return {
-      totalCount: 0,
-      users: [],
+      totalCount: "Not available",
+      users: "Not available",
     };
   }
 }

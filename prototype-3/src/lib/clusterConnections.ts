@@ -1,4 +1,3 @@
-import axios from "axios";
 //! this file requires significant improvement using class object approach
 //! taking up a massive payload of 119
 //! convert to mjs/cjs if possible
@@ -9,7 +8,7 @@ import { userSchema } from "../schema/user";
 import { Connect_cache } from "./redis";
 
 // state main redis url in a string
-const mainCache: string = "redis://localhost:5000";
+const mainCache: string = "redis://localhost:5001";
 
 // state 4 redis urls in a array
 const clusterCaches: string[] = [
@@ -86,13 +85,11 @@ export const mainToClusterInsert = async (
   parsed: z.infer<typeof userSchema>
 ) => {
   try {
-    const leastUsedRedis: GoResponse = await axios.get("http://localhost:8000");
     const response1 = await main_cluster_insert(
       parsed.username,
-      leastUsedRedis.data.port
+      JSON.stringify(parsed)
     );
-    const response2 = await cluster_insert(leastUsedRedis.data.port, parsed);
-    console.log(parsed, "stored at", leastUsedRedis.data.port);
+    console.log("stored at main cache, payload:", parsed);
     return true;
   } catch (err: unknown) {
     console.log(err);
@@ -100,26 +97,13 @@ export const mainToClusterInsert = async (
   }
 };
 
-// getting a data using the combination of main to cluster function
 export const mainToClusterRetrieval = async (key: string) => {
-  let portToGet: any;
   try {
-    // using the key to get the location from the main cache
-    const location = await main_conn.get(key);
-
-    // running a loop to find the index of the location from clusterCaches
-    clusterCaches.forEach((items: string, index: number) => {
-      if (items.includes(location)) {
-        // getting the cached connection string
-        portToGet = main[index];
-      }
-    });
-
-    // getting the data from the clusters
-    const response = await portToGet.get(key);
-    // redis stores and returns string as data,
-    // it is required to JSONify the data as http accepts JSON responses
-    return JSON.parse(response);
+    const data = await main_conn.get(key);
+    if (data) {
+      console.log("payload retrieved");
+    }
+    return JSON.parse(data);
   } catch (err) {
     // this is in case no data is found or transaction error
     // transaction means chain execution
@@ -130,16 +114,7 @@ export const mainToClusterRetrieval = async (key: string) => {
 export const mainToClusterRemove = async (key: string) => {
   let portToGet: any;
   try {
-    // getting the location of the key
-    const location = await main_conn.get(key);
-    clusterCaches.forEach((items: string, index: number) => {
-      if (items.includes(location)) {
-        // getting the cached connection string
-        portToGet = main[index];
-      }
-    });
-    // removing the value using the key from the clusters
-    const response_1 = portToGet.delete(key);
+    const response_1 = await main_conn.delete(key);
     console.log(location, response_1);
     return true;
   } catch (err: unknown) {

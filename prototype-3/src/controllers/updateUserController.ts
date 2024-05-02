@@ -1,9 +1,14 @@
 "use strict";
-// import { cluster_insert } from "../lib/clusterConnections"
+import { z } from 'zod';
 
-export async function UpdateUser(data: IData): Promise<boolean> {
+import { mainToClusterInsert } from '../lib/clusterConnections';
+import { userSchema } from '../schema/user';
+
+export async function UpdateUser(
+  data: z.infer<typeof userSchema>
+): Promise<boolean> {
   try {
-    const response = true;
+    const response = await mainToClusterInsert(data);
     return true;
   } catch (err: unknown) {
     console.error("Error updating document:", err);

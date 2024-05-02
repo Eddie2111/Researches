@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mainToClusterRetrieval = exports.cluster_insert = exports.main_cluster_insert = exports.main_Cluster = exports.cacheClusters = void 0;
+exports.mainToClusterRemove = exports.mainToClusterRetrieval = exports.mainToClusterInsert = exports.cluster_insert = exports.main_cluster_insert = exports.main_Cluster = exports.cacheClusters = void 0;
 // import the connection by getInstance
 const redis_1 = require("./redis");
 // state main redis url in a string
-const mainCache = "redis://localhost:5000";
+const mainCache = "redis://localhost:5001";
 // state 4 redis urls in a array
 const clusterCaches = [
     // approximate first storage initiation
@@ -68,24 +68,25 @@ const cluster_insert = (port, data) => {
     }
 };
 exports.cluster_insert = cluster_insert;
-// getting a data using the combination of main to cluster function
-const mainToClusterRetrieval = async (key) => {
-    let portToGet;
+const mainToClusterInsert = async (parsed) => {
     try {
-        // using the key to get the location from the main cache
-        const location = await main_conn.get(key);
-        // running a loop to find the index of the location from clusterCaches
-        clusterCaches.forEach((items, index) => {
-            if (items.includes(location)) {
-                // getting the cached connection string
-                portToGet = main[index];
-            }
-        });
-        // getting the data from the clusters
-        const response = await portToGet.get(key);
-        // redis stores and returns string as data,
-        // it is required to JSONify the data as http accepts JSON responses
-        return JSON.parse(response);
+        const response1 = await (0, exports.main_cluster_insert)(parsed.username, JSON.stringify(parsed));
+        console.log("stored at main cache, payload:", parsed);
+        return true;
+    }
+    catch (err) {
+        console.log(err);
+        return false;
+    }
+};
+exports.mainToClusterInsert = mainToClusterInsert;
+const mainToClusterRetrieval = async (key) => {
+    try {
+        const data = await main_conn.get(key);
+        if (data) {
+            console.log("payload retrieved");
+        }
+        return JSON.parse(data);
     }
     catch (err) {
         // this is in case no data is found or transaction error
@@ -94,4 +95,29 @@ const mainToClusterRetrieval = async (key) => {
     }
 };
 exports.mainToClusterRetrieval = mainToClusterRetrieval;
+const mainToClusterRemove = async (key) => {
+    let portToGet;
+    try {
+        const response_1 = await main_conn.delete(key);
+        console.log(location, response_1);
+        return true;
+    }
+    catch (err) {
+        // handling operational errors
+        console.log(err);
+        return false;
+    }
+};
+exports.mainToClusterRemove = mainToClusterRemove;
+/*
+/**
+ * an interface a way to define a data type
+ * an interface supports type overloading and type combination
+ * this gives significant advantage over using only "type" to
+ * define a variable.
+ *
+ * use strict over the file is used to handle strict variable
+ * declaration and reducing variable over usage and re-assignment.
+ * Plus, alerts for unused variables and functions.
+ */
 //# sourceMappingURL=clusterConnections.js.map

@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOneUser = void 0;
-const user_1 = require("../schema/user");
+const clusterConnections_1 = require("../lib/clusterConnections");
 async function deleteOneUser(id) {
     try {
-        const structure = await user_1.User.deleteOne({ userId: id });
-        return true;
+        const response = await (0, clusterConnections_1.mainToClusterRemove)(id);
+        return response;
     }
     catch (err) {
         console.log(err);

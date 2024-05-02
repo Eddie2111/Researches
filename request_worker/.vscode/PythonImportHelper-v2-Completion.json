@@ -1,0 +1,101 @@
+[
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "string",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "string",
+        "description": "string",
+        "detail": "string",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "csv",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "csv",
+        "description": "csv",
+        "detail": "csv",
+        "documentation": {}
+    },
+    {
+        "label": "generate_string",
+        "kind": 2,
+        "importPath": "custom.app",
+        "description": "custom.app",
+        "peekOfCode": "def generate_string(length: int = 10) -> str:\n    characters = string.ascii_letters + string.digits\n    return ''.join(random.choice(characters) for _ in range(length))\n# Function to create payload\ndef create_payload() -> dict:\n    return {\n        \"name\": generate_string(),\n        \"username\": generate_string(),\n        \"email\": generate_string() + \"@test.com\",\n    }",
+        "detail": "custom.app",
+        "documentation": {}
+    },
+    {
+        "label": "create_payload",
+        "kind": 2,
+        "importPath": "custom.app",
+        "description": "custom.app",
+        "peekOfCode": "def create_payload() -> dict:\n    return {\n        \"name\": generate_string(),\n        \"username\": generate_string(),\n        \"email\": generate_string() + \"@test.com\",\n    }\n# Function to send request with payload\ndef send_request_payload():\n    with open(\"request_logs.csv\", \"w\", newline='') as csvfile:\n        fieldnames = ['name', 'username', 'email', 'response_time']",
+        "detail": "custom.app",
+        "documentation": {}
+    },
+    {
+        "label": "send_request_payload",
+        "kind": 2,
+        "importPath": "custom.app",
+        "description": "custom.app",
+        "peekOfCode": "def send_request_payload():\n    with open(\"request_logs.csv\", \"w\", newline='') as csvfile:\n        fieldnames = ['name', 'username', 'email', 'response_time']\n        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)\n        writer.writeheader()\n        for _ in range(100000):\n            payload = create_payload()\n            start_time = time.time()  # Start time\n            response = requests.post(\"http://localhost:3100/createUser\", json=payload)\n            end_time = time.time()  # End time",
+        "detail": "custom.app",
+        "documentation": {}
+    },
+    {
+        "label": "generate_string",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def generate_string(length: int = 10) -> str:\n    characters = string.ascii_letters + string.digits\n    return ''.join(random.choice(characters) for _ in range(length))\n# Create payload\ndef create_payload() -> dict:\n    return {\n        \"name\": generate_string(),\n        \"username\": generate_string(),\n        \"email\": generate_string() + \"@test.com\",\n    }",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "create_payload",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def create_payload() -> dict:\n    return {\n        \"name\": generate_string(),\n        \"username\": generate_string(),\n        \"email\": generate_string() + \"@test.com\",\n    }\n# Send request with payload\ndef send_request_payload():\n    with open(\"request_logs1.csv\", \"w\", newline='') as csvfile:\n        fieldnames = ['name', 'username', 'email', 'response_time']",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "send_request_payload",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def send_request_payload():\n    with open(\"request_logs1.csv\", \"w\", newline='') as csvfile:\n        fieldnames = ['name', 'username', 'email', 'response_time']\n        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)\n        writer.writeheader()\n        for _ in range(100000):\n            payload = create_payload()\n            start_time = time.time()  \n            response = requests.post(\"http://localhost:3100/createUser\", json=payload)\n            end_time = time.time()  ",
+        "detail": "app",
+        "documentation": {}
+    }
+]

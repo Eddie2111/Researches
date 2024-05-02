@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateUser = void 0;
-const user_1 = require("../schema/user");
+const clusterConnections_1 = require("../lib/clusterConnections");
 async function UpdateUser(data) {
     try {
-        const response = await user_1.User.updateOne({ userId: data.userId }, data.value);
+        const response = await (0, clusterConnections_1.mainToClusterInsert)(data);
         return true;
     }
     catch (err) {
