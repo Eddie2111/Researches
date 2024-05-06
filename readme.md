@@ -1,5 +1,8 @@
 # Distributed Caching system using Redis and Docker
 
+## Overview
+The "Dynamic Load Balancing Strategies for Distributed Cache Systems" project leverages cutting-edge technology stacks including Node.js, TypeScript, and Redis, along with a Go-based worker component to enhance web application performance through efficient load distribution. The architecture integrates Node.js and Express with TypeScript to handle user operations robustly, utilizing Redis for advanced caching mechanisms. The configuration is designed to be scalable and fault-tolerant, addressing core needs such as cookie handling, Cross-Origin Resource Sharing (CORS), and session management.
+
 ## Prototype-1
 
 - Attempted to use nestJS
